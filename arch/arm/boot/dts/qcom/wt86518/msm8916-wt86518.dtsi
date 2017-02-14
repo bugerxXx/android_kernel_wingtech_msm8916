@@ -9,51 +9,14 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  */
-
-#include "msm8916-camera-sensor-wt86518.dtsi"
-#include "msm-pm8916-wt86518.dtsi"
-#include "dsi-panel-innolux-720p-video.dtsi"
-#include "dsi-panel-hx8394d-720p-video.dtsi"                                               
+                                              
 #include "dsi-panel-ili9881-720p-video.dtsi"
 #include "dsi-panel-ili9881-qimei-720p-video.dtsi"
-
-/ {
-	memory {
-		pstore_reserve_mem: pstore_reserve_region@0 {
-			linux,reserve-contiguous-region;
-			linux,reserve-region;
-			linux,remove-completely;
-			reg = <0x0 0x8c400000 0x0 0x00100000>;
-			label = "pstore_reserve_mem";
-		};
-	};
-};
+#include "dsi-panel-hx8394d-720p-video.dtsi" 
+#include "msm-pm8916-wt86518.dtsi"
+#include "msm8916-camera-sensor-wt86518.dtsi"
 
 &tlmm_pinmux {
-	/*
-	ltr553_int_pin {
-		qcom,pins = <&gp 113>;
-		qcom,pin-func = <0>;
-		qcom,num-grp-pins = <1>;
-		label = "ltr553-irq";
-		ltr553_default: ltr553_default {
-		drive-strength = <6>;
-		bias-disable;
-		};
-	};
-	*/
-	/*
-	stk3x1x_int_pin {
-		qcom,pins = <&gp 113>;
-		qcom,pin-func = <0>;
-		qcom,num-grp-pins = <1>;
-		label = "stk3x1x-irq";
-		stk3x1x_default: stk3x1x_default {
-		drive-strength = <6>;
-		bias-disable;
-		};
-	};
-	*/
 	epl2182_int_pin {
 		qcom,pins = <&gp 113>;
 		qcom,pin-func = <0>;
@@ -111,44 +74,6 @@
 };
 
 &i2c_0 { /* BLSP1 QUP2 */
-	/*
-	liteon@23 {
-		compatible = "liteon,ltr553";
-		status = "disabled";
-		reg = <0x23>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&ltr553_default>;
-		interrupt-parent = <&msm_gpio>;
-		interrupts = <113 0x2>;
-		vdd-supply = <&pm8916_l17>;
-		vi2c-supply = <&pm8916_l6>;
-		liteon,intr = <&msm_gpio 113 0x2>;
-		liteon,highthr = <800>;
-		liteon,lowthr = <300>;
-	};
-	*/
-	/*
-	stk@48 {
-		compatible = "stk,stk3x1x";
-		status = "disabled";
-		reg = <0x48>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&stk3x1x_default>;
-		interrupt-parent = <&msm_gpio>;
-		interrupts = <113 0x2>;
-		vdd-supply = <&pm8916_l17>;
-		vio-supply = <&pm8916_l6>;
-		stk,irq-gpio = <&msm_gpio 113 0x02>;
-		stk,state-reg = <0x00>;
-		stk,psctrl-reg = <0x31>;
-		stk,alsctrl-reg = <0x39>;
-		stk,ledctrl-reg = <0xFF>;
-		stk,wait-reg = <0x07>;
-		stk,ps-thd-h = <1700>;
-		stk,ps-thd-l = <1500>;
-		stk,transmittance = <500>;
-	};
-	*/
 	elan@49 { 
 		compatible = "elan,epl2182";
 		reg = <0x49>;
@@ -335,21 +260,7 @@
     qcom,cont-splash-enabled;
 };
 
-
-
 &soc {
-
-	ramoops {
-		compatible = "ramoops";
-		status = "ok";
-
-		android,ramoops-buffer-start = <0x8c400000>;
-		android,ramoops-buffer-size = <0x100000>;
-		android,ramoops-console-size = <0x80000>;
-		android,ramoops-record-size = <0x20000>;
-		android,ramoops-dump-oops = <0x1>;
-	};
-
 	spi_0 {
 		status = "disabled";
 	};
@@ -392,18 +303,6 @@
 			qcom,msm-codec-type = "internal";
 			qcom,msm-mbhc-hphl-swh = <1>;
 			qcom,msm-mbhc-gnd-swh = <0>;
-			qcom,msm-hs-micbias-type = "internal";
-			qcom,msm-micbias1-ext-cap;
-			qcom,audio-routing =
-				"RX_BIAS", "MCLK",
-				"SPK_RX_BIAS", "MCLK",
-				"INT_LDO_H", "MCLK",
-				"MIC BIAS Internal1", "Handset Mic",
-				"MIC BIAS Internal2", "Headset Mic",
-				"MIC BIAS Internal1", "Secondary Mic",
-				"AMIC1", "MIC BIAS Internal1",
-				"AMIC2", "MIC BIAS Internal2",
-				"AMIC3", "MIC BIAS Internal1";
 			pinctrl-names = "cdc_lines_act",
 					"cdc_lines_sus";
 			pinctrl-0 = <&cdc_pdm_lines_act>;
@@ -419,10 +318,10 @@
 					<&dai_mi2s0>, <&dai_mi2s1>, <&dai_mi2s2>, <&dai_mi2s3>,
 					<&sb_0_rx>, <&sb_0_tx>, <&sb_1_rx>, <&sb_1_tx>,
 					<&sb_3_rx>, <&sb_3_tx>, <&sb_4_rx>, <&sb_4_tx>,
-					<&bt_sco_rx>, <&bt_sco_tx>,
-					<&int_fm_rx>, <&int_fm_tx>,
-					<&afe_pcm_rx>, <&afe_pcm_tx>, <&afe_proxy_rx>, <&afe_proxy_tx>,
-					<&incall_record_rx>, <&incall_record_tx>, <&incall_music_rx>,
+					<&bt_sco_rx>, <&bt_sco_tx>, <&int_fm_rx>, <&int_fm_tx>,
+					<&afe_pcm_rx>, <&afe_pcm_tx>, <&afe_proxy_rx>,
+					<&afe_proxy_tx>, <&incall_record_rx>,
+					<&incall_record_tx>, <&incall_music_rx>,
 					<&incall_music_2_rx>;
 			asoc-cpu-names = "msm-dai-q6-auxpcm.1", "msm-dai-q6-hdmi.8",
 					"msm-dai-q6-mi2s.0", "msm-dai-q6-mi2s.1",
@@ -439,21 +338,113 @@
 					"msm-dai-q6-dev.32773", "msm-dai-q6-dev.32770";
 			asoc-codec = <&stub_codec>, <&pm8916_tombak_dig>;
 			asoc-codec-names = "msm-stub-codec.1", "tombak_codec";
+			qcom,msm-hs-micbias-type = "internel";
+			qcom,audio-routing = "RX_BIAS", "MCLK",
+					"SPK_RX_BIAS", "MCLK",
+					"INT_LDO_H", "MCLK",
+					"MIC BIAS Internal1", "Handset Mic",
+					"MIC BIAS Internal2", "Headset Mic",
+					"MIC BIAS Internal1", "Secondary Mic",
+					"AMIC1", "MIC BIAS Internal1",
+					"AMIC2", "MIC BIAS Internal2",
+					"AMIC3", "MIC BIAS Internal1";
 	};
 
+	i2c@78b9000 { /* BLSP1 QUP5 */
+		focaltech@38 {
+			compatible = "focaltech,5x06";
+			reg = <0x38>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <13 0x2008>;
+			vdd-supply = <&pm8916_l17>;
+			vcc_i2c-supply = <&pm8916_l6>;
+			/* pins used by touchscreen */
+			pinctrl-names = "pmx_ts_active","pmx_ts_suspend";
+			pinctrl-0 = <&ts_int_active &ts_reset_active>;
+			pinctrl-1 = <&ts_int_suspend &ts_reset_suspend>;
+			focaltech,name = "ft6436";
+			focaltech,family-id = <0x36>;
+			focaltech,reset-gpio = <&msm_gpio 12 0x0>;
+			focaltech,irq-gpio = <&msm_gpio 13 0x2008>;
+			focaltech,display-coords = <0 0 720 1280>;
+			focaltech,panel-coords = <0 0 720 1280>;
+			focaltech,button-map= <139 102 158>;
+			focaltech,no-force-update;
+			focaltech,i2c-pull-up;
+			focaltech,group-id = <1>;
+			focaltech,hard-reset-delay-ms = <20>;
+			focaltech,soft-reset-delay-ms = <200>;
+			focaltech,num-max-touches = <5>;
+			focaltech,fw-delay-aa-ms = <30>;
+			focaltech,fw-delay-55-ms = <30>;
+			focaltech,fw-upgrade-id1 = <0x79>;
+			focaltech,fw-upgrade-id2 = <0x18>;
+			focaltech,fw-delay-readid-ms = <10>;
+			focaltech,fw-delay-era-flsh-ms = <2000>;
+			focaltech,fw-auto-cal;
+			focaltech,ignore-id-check;
+		};
+	};
+
+	vdd_vreg: vdd_vreg {
+		compatible = "regulator-fixed";
+		status = "ok";
+		regulator-name = "vdd_vreg";
+	};
+
+	gen-vkeys {
+		compatible = "qcom,gen-vkeys";
+		label = "ft5x06_ts";
+		qcom,disp-maxx = <720>;
+		qcom,disp-maxy = <1280>;
+		qcom,panel-maxx = <720>;
+		qcom,panel-maxy = <1400>;
+		qcom,key-codes = <139 172 158>;
+		qcom,y-offset = <0>;
+	};
+
+};
+
+&pm8916_vadc {
+	chan@30 {
+		qcom,scale-function = <10>;
+	};
+};
+
+&pm8916_adc_tm {
+	chan@30 {
+		qcom,scale-function = <6>;
+	};
+};
+
+&pm8916_chg {
+	qcom,vddmax-mv = <4350>;
+	qcom,vddsafe-mv = <4380>;
+	qcom,vinmin-mv = <4470>;
+	qcom,batt-hot-percentage = <35>;
+	qcom,batt-cold-percentage = <70>;
+	qcom,tchg-mins = <360>;
+	status = "okay";
+};
+
+/ {
+	qrd_batterydata: qcom,battery-data {
+		qcom,rpull-up-kohm = <68>;
+		qcom,vref-batt-therm = <1800000>;
+
+		#include "batterydata-wingtech-guangyu-4v35-2300mah.dtsi"
+	};
+};
+
+&pm8916_bms {
+	status = "ok";
+	qcom,battery-data = <&qrd_batterydata>;
 };
 
 &sdc2_cd_on {
 	/delete-property/ bias-pull-up;
 	bias-disable;
 };
-
-/*&sdhc_2 {
-	qcom,vdd-always-on;
-	qcom,vdd-lpm-sup;
-
-	qcom,vdd-current-level = <4000 400000>;
-};*/
 
 &sdhc_2 {
 	vdd-supply = <&pm8916_l11>;
