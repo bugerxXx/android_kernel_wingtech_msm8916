@@ -24,24 +24,27 @@
 
 };
 
-&soc {
-
-	sound {
-		qcom,msm-hs-micbias-type = "internel";
-		qcom,audio-routing =
-				"RX_BIAS", "MCLK",
-				"SPK_RX_BIAS", "MCLK",
-				"INT_LDO_H", "MCLK",
-				"MIC BIAS Internal1", "Handset Mic",
-				"MIC BIAS Internal2", "Headset Mic",
-				"MIC BIAS Internal1", "Secondary Mic",
-				"AMIC1", "MIC BIAS Internal1",
-				"AMIC2", "MIC BIAS Internal2",
-				"AMIC3", "MIC BIAS Internal1";
-
-
+&spmi_bus {
+	qcom,pm8916@1 {
+		qcom,vibrator@c000 {
+			status = "okay";
+			qcom,vib-timeout-ms = <15000>;
+			qcom,vib-vtg-level-mV = <3000>;
+		};
 	};
 };
+
+&pm8916_l11 {
+	regulator-max-microvolt = <3300000>;
+	qcom,init-voltage = <3000000>;
+};
+
+&pm8916_l16 {
+	regulator-min-microvolt = <2600000>;
+	qcom,init-voltage = <2600000>;
+	regulator-always-on;
+};
+
 &pm8916_chg {
 	qcom,vddmax-mv = <4350>;
 	qcom,vddsafe-mv = <4380>;
@@ -50,6 +53,15 @@
 	qcom,batt-cold-percentage = <70>;
 	qcom,tchg-mins = <360>;
 	status = "okay";
+};
+
+/ {
+	qrd_batterydata: qcom,battery-data {
+		qcom,rpull-up-kohm = <68>;
+		qcom,vref-batt-therm = <1800000>;
+
+		#include "wt86518/batterydata-wingtech-guangyu-4v35-2300mah.dtsi"
+	};
 };
 
 &pm8916_bms {
