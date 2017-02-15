@@ -17,9 +17,6 @@
 #include "msm_sd.h"
 #include "msm_cci.h"
 #include "msm_eeprom.h"
-#ifdef CONFIG_MACH_WT86518
-#include <linux/hardware_info.h>
-#endif
 
 #undef CDBG
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
@@ -1067,19 +1064,7 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
 	for (j = 0; j < e_ctrl->cal_data.num_data; j++)
 		CDBG("memory_data[%d] = 0x%X\n", j,
 			e_ctrl->cal_data.mapdata[j]);
-#ifdef CONFIG_MACH_WT86518
-	if (eb_info->i2c_slaveaddr == 0x20) {
-		if (e_ctrl->cal_data.mapdata[1] == 0x7) {
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID,"oufeiguang");
-		}
-		else if (e_ctrl->cal_data.mapdata[1] == 0x6) {
-			hardwareinfo_set_prop(HARDWARE_BACK_CAM_MOUDULE_ID,"qiutaiwei");	
-		}
-	}
-	else {
-		CDBG("%s hardwareinfo_set_prop error :%d\n", __func__, __LINE__);
-	}
-#endif
+
 	e_ctrl->is_supported |= msm_eeprom_match_crc(&e_ctrl->cal_data);
 
 	rc = msm_camera_power_down(power_info, e_ctrl->eeprom_device_type,
